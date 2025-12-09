@@ -94,7 +94,7 @@ public class ConcertController {
     public String showEditForm(@RequestParam("id") Long id,
                                RedirectAttributes redirectAttributes,
                                Model model) {
-        logger.info("Mostrando formulario de edición para la sucursal con ID {}", id);
+        logger.info("Mostrando formulario de edición para el concierto con ID {}", id);
         Optional<Concert> concertOpt = concertRepository.findById(id);
 
         if (concertOpt.isEmpty()) {

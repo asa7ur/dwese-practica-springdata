@@ -26,15 +26,10 @@ public class Attendee {
     @Column(name = "dni", nullable = false, length = 20)
     private String dni;
 
-    @NotEmpty(message = "{msg.attendee.firstName.notEmpty}")
-    @Size(max = 100, message = "{msg.attendee.lastName.size}")
-    @Column(name = "firstName", nullable = false, length = 100)
-    private String firstName;
-
-    @NotEmpty(message = "{msg.attendee.lastName.notEmpty}")
-    @Size(max = 100, message = "{msg.attendee.lastName.size}")
-    @Column(name = "lastName", nullable = false, length = 100)
-    private String lastName;
+    @NotEmpty(message = "{msg.attendee.name.notEmpty}")
+    @Size(max = 100, message = "{msg.attendee.name.size}")
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
     @NotEmpty(message = "{msg.attendee.phone.notEmpty}")
     @Size(max = 25, message = "{msg.attendee.phone.size}")
