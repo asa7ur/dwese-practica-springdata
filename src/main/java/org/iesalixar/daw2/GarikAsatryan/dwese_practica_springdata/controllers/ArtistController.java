@@ -104,9 +104,9 @@ public class ArtistController {
     }
 
     @PostMapping("/insert")
-    public String insertStage(@Valid @ModelAttribute("artist") Artist artist,
-                              BindingResult result,
-                              RedirectAttributes redirectAttributes) {
+    public String insertArtist(@Valid @ModelAttribute("artist") Artist artist,
+                               BindingResult result,
+                               RedirectAttributes redirectAttributes) {
 
         logger.info("Intentando insertar nuevo artista...");
 
@@ -123,9 +123,9 @@ public class ArtistController {
     }
 
     @PostMapping("/update")
-    public String updateStage(@Valid @ModelAttribute("artist") Artist artist,
-                              BindingResult result,
-                              RedirectAttributes redirectAttributes) {
+    public String updateArtist(@Valid @ModelAttribute("artist") Artist artist,
+                               BindingResult result,
+                               RedirectAttributes redirectAttributes) {
 
         logger.info("Actualizando artista con ID {}", artist.getId());
 
@@ -144,8 +144,8 @@ public class ArtistController {
     }
 
     @PostMapping("/delete")
-    public String deleteStage(@RequestParam("id") Long id,
-                              RedirectAttributes redirectAttributes) {
+    public String deleteArtist(@RequestParam("id") Long id,
+                               RedirectAttributes redirectAttributes) {
         logger.info("Intentando eliminar artista con ID {}", id);
 
         // Comprobamos si tiene conciertos asignados

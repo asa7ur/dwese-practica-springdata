@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <body>
+<header th:fragment="header">
+    <nav class="bg-black border-b-2 border-rock-red mb-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between items-center py-4">
+                <a th:href="@{/}"
+                   class="flex items-center text-rock-red font-bold text-xl uppercase tracking-wider hover:text-white transition duration-300">
+                    <i class="fa-solid fa-music mr-2"></i> RockFest Manager
+                </a>
 
+                <div class="block lg:hidden">
+                    <button class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <div class="hidden lg:flex space-x-8">
+                    <a th:href="@{/artists}"
+                       class="text-gray-300 hover:text-rock-red font-medium transition duration-300 uppercase text-sm tracking-wide">Artistas</a>
+                    <a th:href="@{/stages}"
+                       class="text-gray-300 hover:text-rock-red font-medium transition duration-300 uppercase text-sm tracking-wide">Escenarios</a>
+                    <a th:href="@{/concerts}"
+                       class="text-gray-300 hover:text-rock-red font-medium transition duration-300 uppercase text-sm tracking-wide">Conciertos</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
 </body>
 </html>

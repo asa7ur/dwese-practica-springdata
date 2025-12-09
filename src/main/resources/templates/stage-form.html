@@ -1,10 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
-$END$
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mx-auto px-4 flex justify-center items-center min-h-[80vh]">
+    <div class="w-full max-w-lg">
+        <div class="bg-rock-800 rounded-lg shadow-2xl border border-gray-700 overflow-hidden transform transition-all hover:shadow-rock-red/10">
+
+            <div class="bg-black/40 px-6 py-4 border-b border-gray-700 flex justify-between items-center">
+                <h4 class="text-lg font-bold text-white uppercase tracking-wide">
+                    <i class="fa-solid fa-dungeon mr-2 text-rock-red"></i>
+                    <span th:text="${stage.id} ? 'Editar Escenario' : 'Nuevo Escenario'">Formulario</span>
+                </h4>
+                <span th:if="${stage.id}"
+                      class="text-xs bg-yellow-600/20 text-yellow-500 px-2 py-1 rounded border border-yellow-600/30">EDICIÓN</span>
+            </div>
+
+            <div class="p-8">
+                <form th:action="${stage.id != null} ? @{/stages/update} : @{/stages/insert}"
+                      th:object="${stage}" method="post" class="space-y-6">
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Nombre del
+                            Escenario</label>
+                        <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                    <i class="fa-solid fa-tag"></i>
+                                </span>
+                            <input type="text" id="name" th:field="*{name}"
+                                   class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 pl-10 pr-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
+                                   placeholder="Ej. Main Stage of Hell">
+                        </div>
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                            Error</p>
+                    </div>
+
+                    <div>
+                        <label for="capacity" class="block text-sm font-medium text-gray-400 mb-1">Capacidad
+                            (Aforo)</label>
+                        <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                    <i class="fa-solid fa-users"></i>
+                                </span>
+                            <input type="number" id="capacity" th:field="*{capacity}" min="1"
+                                   class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 pl-10 pr-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
+                                   placeholder="Ej. 50000">
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">Número máximo de asistentes permitidos.</p>
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('capacity')}"
+                           th:errors="*{capacity}">Error</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-gray-700">
+                        <button type="submit"
+                                class="flex-1 bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg transition duration-300 flex justify-center items-center">
+                            <i class="fa-solid fa-save mr-2"></i> Guardar
+                        </button>
+                        <a th:href="@{/stages}"
+                           class="flex-1 text-center bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-medium py-2 px-4 rounded transition duration-300">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

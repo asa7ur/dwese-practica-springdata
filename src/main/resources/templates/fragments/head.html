@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival Manager</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rock: {
+                            900: '#121212', /* Fondo muy oscuro */
+                            800: '#1e1e1e', /* Fondo de tarjetas */
+                            700: '#2d2d2d', /* Inputs */
+                            red: '#dc3545', /* Rojo Festival */
+                            darkred: '#b02a37'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        body {
+            @apply bg-rock-900 text-gray-200;
+        }
+    </style>
 </head>
 <body>
-
 </body>
 </html>
