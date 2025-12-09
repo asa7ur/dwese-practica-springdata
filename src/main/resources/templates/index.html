@@ -16,11 +16,11 @@
             RockFest <span class="text-rock-red">Manager</span>
         </h1>
         <p class="text-xl text-gray-400 max-w-2xl mx-auto px-4 relative z-10">
-            Panel de administración para el festival más esperado del año. Gestiona bandas, escenarios y horarios.
+            Panel de administración para el festival más brutal del año.
         </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
         <a th:href="@{/artists}"
            class="group block bg-rock-800 rounded-xl p-8 border border-gray-700 hover:border-rock-red hover:shadow-[0_0_20px_rgba(220,53,69,0.3)] transition duration-300 transform hover:-translate-y-2">
@@ -28,11 +28,10 @@
                 <h3 class="text-2xl font-bold text-white uppercase group-hover:text-rock-red transition">Artistas</h3>
                 <i class="fa-solid fa-guitar text-4xl text-gray-600 group-hover:text-white transition"></i>
             </div>
-            <p class="text-gray-400 mb-4">Gestiona el Line-Up. Añade nuevas bandas, edita su información o elimina
-                registros.</p>
+            <p class="text-gray-400 mb-4">Gestiona el Line-Up de bandas.</p>
             <span class="text-rock-red font-semibold text-sm uppercase tracking-wide flex items-center">
                     Acceder <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
-                </span>
+            </span>
         </a>
 
         <a th:href="@{/stages}"
@@ -41,24 +40,46 @@
                 <h3 class="text-2xl font-bold text-white uppercase group-hover:text-rock-red transition">Escenarios</h3>
                 <i class="fa-solid fa-dungeon text-4xl text-gray-600 group-hover:text-white transition"></i>
             </div>
-            <p class="text-gray-400 mb-4">Controla los escenarios (Main Stage, Abyss, Purgatory...) y sus
-                capacidades.</p>
+            <p class="text-gray-400 mb-4">Control de aforo y zonas.</p>
             <span class="text-rock-red font-semibold text-sm uppercase tracking-wide flex items-center">
                     Acceder <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
-                </span>
+            </span>
         </a>
 
         <a th:href="@{/concerts}"
            class="group block bg-rock-800 rounded-xl p-8 border border-gray-700 hover:border-rock-red hover:shadow-[0_0_20px_rgba(220,53,69,0.3)] transition duration-300 transform hover:-translate-y-2">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-2xl font-bold text-white uppercase group-hover:text-rock-red transition">Conciertos</h3>
-                <i class="fa-solid fa-ticket text-4xl text-gray-600 group-hover:text-white transition"></i>
+                <i class="fa-solid fa-clock text-4xl text-gray-600 group-hover:text-white transition"></i>
             </div>
-            <p class="text-gray-400 mb-4">Organiza el horario. Asigna bandas a escenarios y establece las horas de
-                inicio.</p>
+            <p class="text-gray-400 mb-4">Programación y horarios.</p>
             <span class="text-rock-red font-semibold text-sm uppercase tracking-wide flex items-center">
                     Acceder <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
-                </span>
+            </span>
+        </a>
+
+        <a th:href="@{/attendees}"
+           class="group block bg-rock-800 rounded-xl p-8 border border-gray-700 hover:border-rock-red hover:shadow-[0_0_20px_rgba(220,53,69,0.3)] transition duration-300 transform hover:-translate-y-2">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-white uppercase group-hover:text-rock-red transition">Asistentes</h3>
+                <i class="fa-solid fa-users text-4xl text-gray-600 group-hover:text-white transition"></i>
+            </div>
+            <p class="text-gray-400 mb-4">Base de datos de personas registradas.</p>
+            <span class="text-rock-red font-semibold text-sm uppercase tracking-wide flex items-center">
+                    Acceder <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+            </span>
+        </a>
+
+        <a th:href="@{/tickets}"
+           class="group block bg-rock-800 rounded-xl p-8 border border-gray-700 hover:border-rock-red hover:shadow-[0_0_20px_rgba(220,53,69,0.3)] transition duration-300 transform hover:-translate-y-2">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-white uppercase group-hover:text-rock-red transition">Entradas</h3>
+                <i class="fa-solid fa-ticket text-4xl text-gray-600 group-hover:text-white transition"></i>
+            </div>
+            <p class="text-gray-400 mb-4">Venta y gestión de accesos.</p>
+            <span class="text-rock-red font-semibold text-sm uppercase tracking-wide flex items-center">
+                    Acceder <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+            </span>
         </a>
 
     </div>

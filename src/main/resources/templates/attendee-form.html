@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
 
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mx-auto px-4 flex justify-center items-center min-h-[80vh]">
+    <div class="w-full max-w-lg">
+        <div class="bg-rock-800 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
+
+            <div class="bg-black/40 px-6 py-4 border-b border-gray-700">
+                <h4 class="text-lg font-bold text-white uppercase tracking-wide">
+                    <i class="fa-solid fa-user-plus mr-2 text-rock-red"></i>
+                    <span th:text="${attendee.id} ? 'Editar Asistente' : 'Nuevo Asistente'">Formulario</span>
+                </h4>
+            </div>
+
+            <div class="p-8">
+                <form th:action="${attendee.id != null} ? @{/attendees/update} : @{/attendees/insert}"
+                      th:object="${attendee}" method="post" class="space-y-5">
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div>
+                        <label for="dni" class="block text-sm font-medium text-gray-400 mb-1">DNI / ID</label>
+                        <input type="text" id="dni" th:field="*{dni}"
+                               class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition uppercase"
+                               placeholder="12345678A">
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                            Error</p>
+                    </div>
+
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Nombre Completo</label>
+                        <input type="text" id="name" th:field="*{name}"
+                               class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
+                               placeholder="Juan Pérez">
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                            Error</p>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-400 mb-1">Correo
+                            Electrónico</label>
+                        <input type="email" id="email" th:field="*{email}"
+                               class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
+                               placeholder="juan@email.com">
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                            Error</p>
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-400 mb-1">Teléfono</label>
+                        <input type="text" id="phone" th:field="*{phone}"
+                               class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
+                               placeholder="600123456">
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+                            Error</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-gray-700">
+                        <button type="submit"
+                                class="flex-1 bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-4 rounded transition duration-300">
+                            Guardar
+                        </button>
+                        <a th:href="@{/attendees}"
+                           class="flex-1 text-center bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-medium py-2 px-4 rounded transition duration-300">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

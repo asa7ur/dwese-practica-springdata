@@ -45,22 +45,22 @@ VALUES ('2025-07-10 18:00:00', '2025-07-10 19:30:00', 13, 2),
        ('2025-07-12 15:00:00', '2025-07-12 16:00:00', 6, 3),
        ('2025-07-10 22:00:00', '2025-07-10 23:30:00', 9, 2);
 
-INSERT IGNORE INTO attendees (dni, firstName, lastName, phone, email)
-VALUES ('12345678A', 'Juan', 'García', '600111222', 'juan.garcia@email.com'),
-       ('87654321B', 'María', 'López', '600333444', 'maria.lopez@email.com'),
-       ('11223344C', 'Carlos', 'Martínez', '600555666', 'carlos.mtz@email.com'),
-       ('44332211D', 'Laura', 'Sánchez', '600777888', 'laura.sanchez@email.com'),
-       ('99887766E', 'Pedro', 'Gómez', '600999000', 'pedro.gomez@email.com'),
-       ('55667788F', 'Ana', 'Fernández', '611222333', 'ana.fernandez@email.com'),
-       ('22334455G', 'David', 'Díaz', '622333444', 'david.diaz@email.com'),
-       ('66778899H', 'Lucía', 'Pérez', '633444555', 'lucia.perez@email.com'),
-       ('77889900J', 'Javier', 'Ruiz', '644555666', 'javier.ruiz@email.com'),
-       ('00112233K', 'Elena', 'Jiménez', '655666777', 'elena.jimenez@email.com'),
-       ('33445566L', 'Sergio', 'Moreno', '666777888', 'sergio.moreno@email.com'),
-       ('99001122M', 'Carmen', 'Muñoz', '677888999', 'carmen.munoz@email.com'),
-       ('55443322N', 'Antonio', 'Álvarez', '688999000', 'antonio.alvarez@email.com'),
-       ('11002299P', 'Isabel', 'Romero', '699000111', 'isabel.romero@email.com'),
-       ('22113300Q', 'Miguel', 'Navarro', '700111222', 'miguel.navarro@email.com');
+INSERT IGNORE INTO attendees (dni, name, phone, email)
+VALUES ('12345678A', 'Juan García', '600111222', 'juan.garcia@email.com'),
+       ('87654321B', 'María López', '600333444', 'maria.lopez@email.com'),
+       ('11223344C', 'Carlos Martínez', '600555666', 'carlos.mtz@email.com'),
+       ('44332211D', 'Laura Sánchez', '600777888', 'laura.sanchez@email.com'),
+       ('99887766E', 'Pedro Gómez', '600999000', 'pedro.gomez@email.com'),
+       ('55667788F', 'Ana Fernández', '611222333', 'ana.fernandez@email.com'),
+       ('22334455G', 'David Díaz', '622333444', 'david.diaz@email.com'),
+       ('66778899H', 'Lucía Pérez', '633444555', 'lucia.perez@email.com'),
+       ('77889900J', 'Javier Ruiz', '644555666', 'javier.ruiz@email.com'),
+       ('00112233K', 'Elena Jiménez', '655666777', 'elena.jimenez@email.com'),
+       ('33445566L', 'Sergio Moreno', '666777888', 'sergio.moreno@email.com'),
+       ('99001122M', 'Carmen Muñoz', '677888999', 'carmen.munoz@email.com'),
+       ('55443322N', 'Antonio Álvarez', '688999000', 'antonio.alvarez@email.com'),
+       ('11002299P', 'Isabel Romero', '699000111', 'isabel.romero@email.com'),
+       ('22113300Q', 'Miguel Navarro', '700111222', 'miguel.navarro@email.com');
 
 INSERT IGNORE INTO tickets (price, type, is_used, attendee_id)
 VALUES (150.00, 'GENERAL', 1, 1),

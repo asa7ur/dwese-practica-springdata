@@ -1,10 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
 
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mx-auto px-4 min-h-screen">
+
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <h2 class="text-3xl font-bold text-white text-shadow uppercase border-l-4 border-rock-red pl-4">
+            <i class="fa-solid fa-ticket-simple mr-2 text-rock-red"></i>Entradas / Tickets
+        </h2>
+        <a th:href="@{/tickets/new}"
+           class="bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-6 rounded shadow-lg transform hover:scale-105 transition duration-300">
+            <i class="fa-solid fa-plus mr-1"></i> Vender Entrada
+        </a>
+    </div>
+
+    <div th:if="${successMessage}"
+         class="bg-green-900/50 border border-green-600 text-green-100 px-4 py-3 rounded relative mb-6" role="alert">
+        <span class="block sm:inline"><i class="fa-solid fa-check-circle mr-2"></i><span
+                th:text="${successMessage}"></span></span>
+    </div>
+    <div th:if="${errorMessage}"
+         class="bg-red-900/50 border border-red-600 text-red-100 px-4 py-3 rounded relative mb-6" role="alert">
+        <span class="block sm:inline"><i class="fa-solid fa-exclamation-triangle mr-2"></i><span
+                th:text="${errorMessage}"></span></span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div th:each="ticket : ${listTickets.tickets}"
+             class="bg-rock-800 rounded-lg overflow-hidden shadow-lg hover:shadow-rock-red/20 transition duration-300 group border border-gray-700 flex relative">
+
+            <div class="w-4 bg-rock-red h-full absolute left-0 top-0 border-r border-dashed border-black/50"></div>
+
+            <div class="pl-8 p-6 flex-grow">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="font-mono text-xs text-gray-500">ID: <span th:text="${ticket.id}">001</span></span>
+
+                    <div class="flex flex-col gap-1 items-end">
+                            <span th:class="${ticket.type.name() == 'VIP' ? 'bg-yellow-600/20 text-yellow-500 border-yellow-600/50' : 'bg-gray-700 text-gray-300 border-gray-600'} + ' px-2 py-0.5 rounded text-xs font-bold border uppercase'"
+                                  th:text="${ticket.type}">VIP</span>
+
+                        <span th:if="${ticket.isUsed}" class="text-xs text-red-500 font-bold uppercase tracking-wider">[USADA]</span>
+                        <span th:unless="${ticket.isUsed}"
+                              class="text-xs text-green-500 font-bold uppercase tracking-wider">[ACTIVA]</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="text-lg font-bold text-white mb-1" th:text="${ticket.attendee.name}">Nombre
+                        Asistente</h5>
+                    <div class="flex items-center gap-2 text-gray-400 text-sm">
+                        <i class="fa-solid fa-id-card"></i> <span th:text="${ticket.attendee.dni}">DNI</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end border-t border-gray-700 pt-3 mt-2">
+                    <span class="text-2xl font-bold text-white" th:text="${ticket.price} + ' €'">150.0 €</span>
+
+                    <div class="flex gap-2">
+                        <a th:href="@{/tickets/edit(id=${ticket.id})}" class="text-gray-400 hover:text-white transition"
+                           title="Editar">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <form th:action="@{/tickets/delete}" method="post" class="inline">
+                            <input type="hidden" name="id" th:value="${ticket.id}"/>
+                            <button type="submit" class="text-gray-400 hover:text-red-500 transition"
+                                    onclick="return confirm('¿Eliminar esta entrada?');" title="Eliminar">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(listTickets.tickets)}" class="text-center py-12">
+        <p class="text-gray-500 text-xl">No hay entradas registradas.</p>
+    </div>
+
+    <div class="mt-10 flex justify-center" th:if="${listTickets.pages > 1}">
+        <nav class="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <a th:each="i : ${#numbers.sequence(1, listTickets.pages)}"
+               th:href="@{/tickets(page=${i})}"
+               th:text="${i}"
+               class="px-4 py-2 border border-gray-700 text-sm font-medium transition"
+               th:classappend="${i == listTickets.currentPage} ? 'bg-rock-red text-white border-rock-red' : 'bg-rock-800 text-gray-400 hover:bg-gray-700'">
+                1
+            </a>
+        </nav>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

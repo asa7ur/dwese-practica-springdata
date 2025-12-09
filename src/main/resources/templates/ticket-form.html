@@ -1,10 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
 
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mx-auto px-4 flex justify-center items-center min-h-[80vh]">
+    <div class="w-full max-w-lg">
+        <div class="bg-rock-800 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
+
+            <div class="bg-black/40 px-6 py-4 border-b border-gray-700">
+                <h4 class="text-lg font-bold text-white uppercase tracking-wide">
+                    <i class="fa-solid fa-ticket mr-2 text-rock-red"></i>
+                    <span th:text="${ticket.id} ? 'Editar Entrada' : 'Vender Entrada'">Formulario</span>
+                </h4>
+            </div>
+
+            <div class="p-8">
+                <form th:action="${ticket.id != null} ? @{/tickets/update} : @{/tickets/insert}"
+                      th:object="${ticket}" method="post" class="space-y-6">
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div>
+                        <label for="attendee" class="block text-sm font-medium text-gray-400 mb-1">Asistente</label>
+                        <div class="relative">
+                            <select id="attendee" th:field="*{attendee}"
+                                    class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red transition appearance-none">
+                                <option value="" disabled selected>Selecciona un asistente...</option>
+                                <option th:each="att : ${allAttendees}"
+                                        th:value="${att.id}"
+                                        th:text="${att.name + ' (' + att.dni + ')'}">Juan (12345678A)
+                                </option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('attendee')}"
+                           th:errors="*{attendee}">Error</p>
+                    </div>
+
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-gray-400 mb-1">Tipo de Entrada</label>
+                        <div class="relative">
+                            <select id="type" th:field="*{type}"
+                                    class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red transition appearance-none">
+                                <option value="GENERAL">GENERAL</option>
+                                <option value="VIP">VIP</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="price" class="block text-sm font-medium text-gray-400 mb-1">Precio (€)</label>
+                        <input type="number" id="price" th:field="*{price}" step="0.01" min="0"
+                               class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red transition"
+                               placeholder="150.00">
+                        <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">
+                            Error</p>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-black/20 p-3 rounded border border-gray-700">
+                        <input type="checkbox" id="isUsed" th:field="*{isUsed}"
+                               class="w-5 h-5 text-rock-red bg-rock-700 border-gray-600 rounded focus:ring-rock-red focus:ring-2">
+                        <label for="isUsed" class="text-gray-300 select-none cursor-pointer">Marcar como entrada ya
+                            usada (acceso realizado)</label>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-gray-700">
+                        <button type="submit"
+                                class="flex-1 bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-4 rounded transition duration-300">
+                            Guardar
+                        </button>
+                        <a th:href="@{/tickets}"
+                           class="flex-1 text-center bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-medium py-2 px-4 rounded transition duration-300">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
