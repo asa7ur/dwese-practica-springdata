@@ -12,4 +12,8 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
             "LOWER(c.artist.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(c.stage.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Concert> searchConcerts(@Param("keyword") String keyword, Pageable pageable);
+
+    boolean existsByStageId(Long stageId);
+
+    boolean existsByArtistId(Long artistId);
 }

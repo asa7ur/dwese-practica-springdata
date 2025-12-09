@@ -2,6 +2,7 @@ package org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.controllers;
 
 import jakarta.validation.Valid;
 import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.entities.Stage;
+import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.repositories.ConcertRepository;
 import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.repositories.StageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,14 @@ public class StageController {
     private StageRepository stageRepository;
 
     @Autowired
+    private ConcertRepository concertRepository;
+
+    @Autowired
     private MessageSource messageSource;
 
     @GetMapping
     public String listStages(Model model) {
-        logger.info("Listando todos los escenarios (sin paginación)...");
+        logger.info("Listando todos los escenarios...");
 
         List<Stage> stages = stageRepository.findAll();
 
@@ -77,8 +81,6 @@ public class StageController {
         }
 
         stageRepository.save(stage);
-
-        // Asumiendo que tienes mensajes configurados para stage, si no, usa un string fijo o el de concert adaptado
         String message = messageSource.getMessage("msg.stage.flash.created", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
 
@@ -111,13 +113,9 @@ public class StageController {
                               RedirectAttributes redirectAttributes) {
         logger.info("Intentando eliminar escenario con ID {}", id);
 
-        Optional<Stage> stageOpt = stageRepository.findById(id);
-
-        Stage stage = stageOpt.get();
-
         // Comprobamos si tiene conciertos asignados
-        if (!stage.getConcerts().isEmpty()) {
-            logger.warn("No se puede eliminar el escenario {} porque tiene conciertos asignados.", id);
+        if (concertRepository.existsByStageId(id)) {
+            logger.warn("Intento de eliminar escenario con ID {} fallido: Tiene conciertos asignados.", id);
 
             String message = messageSource.getMessage("msg.stage.flash.has-concerts", null, LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("errorMessage", message);
