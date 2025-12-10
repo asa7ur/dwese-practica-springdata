@@ -109,8 +109,10 @@
                         </a>
                         <form th:action="@{/tickets/delete}" method="post" class="inline">
                             <input type="hidden" name="id" th:value="${ticket.id}"/>
-                            <button type="submit" class="text-gray-400 hover:text-red-500 transition"
-                                    th:onclick="return confirm([[#{msg.ticket.list.confirm.delete}]]);"
+                            <button type="submit"
+                                    class="text-gray-400 hover:text-red-500 transition"
+                                    th:data-confirm-msg="#{msg.ticket.list.confirm.delete}"
+                                    onclick="return confirm(this.getAttribute('data-confirm-msg'))"
                                     th:title="#{msg.btn.delete}">
                                 <i class="fa-solid fa-trash"></i>
                             </button>

@@ -112,8 +112,10 @@
                     </a>
                     <form th:action="@{/concerts/delete}" method="post" class="inline">
                         <input type="hidden" name="id" th:value="${concert.id}"/>
-                        <button type="submit" class="text-red-500 hover:text-red-400 text-sm transition"
-                                th:onclick="return confirm([[#{msg.concert.list.confirm.delete}]]);"
+                        <button type="submit"
+                                class="text-red-500 hover:text-red-400 text-sm transition"
+                                th:data-confirm-msg="#{msg.concert.list.confirm.delete}"
+                                onclick="return confirm(this.getAttribute('data-confirm-msg'))"
                                 th:title="#{msg.btn.delete}">
                             <i class="fa-solid fa-trash"></i>
                         </button>

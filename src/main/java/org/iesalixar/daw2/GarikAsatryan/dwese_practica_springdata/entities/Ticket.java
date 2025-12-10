@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "tickets")
@@ -38,5 +39,6 @@ public class Ticket {
     // Relación ManyToOne: Muchos tickets pertenecen a un asistente
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attendee_id", nullable = false)
+    @ToString.Exclude
     private Attendee attendee;
 }

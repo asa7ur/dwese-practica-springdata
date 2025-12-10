@@ -107,7 +107,8 @@
                     <input type="hidden" name="id" th:value="${attendee.id}"/>
                     <button type="submit"
                             class="text-red-500 hover:text-red-400 text-sm font-semibold transition flex items-center gap-1"
-                            th:onclick="return confirm([[#{msg.attendee.list.confirm.delete}]]);">
+                            th:data-confirm-msg="#{msg.attendee.list.confirm.delete}"
+                            onclick="return confirm(this.getAttribute('data-confirm-msg'))">
                         <i class="fa-solid fa-trash"></i> <span th:text="#{msg.btn.delete}">Borrar</span>
                     </button>
                 </form>

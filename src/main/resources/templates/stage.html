@@ -63,7 +63,8 @@
                         <input type="hidden" name="id" th:value="${stage.id}"/>
                         <button type="submit"
                                 class="w-full py-2 rounded bg-gray-700 hover:bg-red-600/20 text-gray-300 hover:text-red-500 transition border border-transparent hover:border-red-500/50"
-                                th:onclick="return confirm([[#{msg.stage.list.confirm.delete}]]);">
+                                th:data-confirm-msg="#{msg.stage.list.confirm.delete}"
+                                onclick="return confirm(this.getAttribute('data-confirm-msg'))">
                             <i class="fa-solid fa-trash mr-1"></i> <span th:text="#{msg.btn.delete}">Borrar</span>
                         </button>
                     </form>

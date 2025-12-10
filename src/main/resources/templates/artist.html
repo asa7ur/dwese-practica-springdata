@@ -94,8 +94,10 @@
 
                 <form th:action="@{/artists/delete}" method="post" class="inline">
                     <input type="hidden" name="id" th:value="${artist.id}"/>
-                    <button type="submit" class="text-red-500 hover:text-red-400 font-medium text-sm transition ml-2"
-                            th:onclick="return confirm([[#{msg.artist.list.confirm.delete}]]);">
+                    <button type="submit"
+                            class="text-red-500 hover:text-red-400 font-medium text-sm transition ml-2"
+                            th:data-confirm-msg="#{msg.artist.list.confirm.delete}"
+                            onclick="return confirm(this.getAttribute('data-confirm-msg'))">
                         <i class="fa-solid fa-trash mr-1"></i> <span th:text="#{msg.btn.delete}">Borrar</span>
                     </button>
                 </form>

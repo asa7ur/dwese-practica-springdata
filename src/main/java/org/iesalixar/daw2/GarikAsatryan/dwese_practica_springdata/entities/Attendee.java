@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +45,6 @@ public class Attendee {
 
     // Relación OneToMany: Un asistente puede comprar varios tickets
     @OneToMany(mappedBy = "attendee", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Ticket> tickets = new ArrayList<>();
 }
