@@ -138,6 +138,7 @@ public class ArtistController {
     public String updateArtist(@Valid @ModelAttribute("artist") Artist artist,
                                BindingResult result,
                                @RequestParam("imageFile") MultipartFile imageFile,
+                               @RequestParam(value = "deleteImage", defaultValue = "false") boolean deleteImage,
                                RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -149,16 +150,22 @@ public class ArtistController {
         Artist existingArtist = artistRepository.findById(artist.getId()).orElse(null);
 
         if (!imageFile.isEmpty()) {
-            // Si suben nueva imagen, borramos la vieja y guardamos la nueva
+            // Caso 1: Nueva imagen subida (reemplaza la anterior)
             if (existingArtist != null && existingArtist.getImage() != null) {
                 fileStorageService.deleteFile(existingArtist.getImage());
             }
             String fileName = fileStorageService.saveFile(imageFile);
-            if (fileName != null) {
-                artist.setImage(fileName);
+            artist.setImage(fileName);
+
+        } else if (deleteImage) {
+            // Caso 2: El usuario pulsó el botón "Eliminar foto"
+            if (existingArtist != null && existingArtist.getImage() != null) {
+                fileStorageService.deleteFile(existingArtist.getImage());
             }
+            artist.setImage(null);
+
         } else {
-            // Si no suben nada, mantenemos la imagen que ya tenía
+            // Caso 3: Mantener la imagen existente
             if (existingArtist != null) {
                 artist.setImage(existingArtist.getImage());
             }
@@ -188,6 +195,47 @@ public class ArtistController {
         String message = messageSource.getMessage("msg.artist.flash.deleted", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
 
+        return "redirect:/artists";
+    }
+
+    @PostMapping("/deleteImage")
+    public String deleteArtistImage(@RequestParam("id") Long id,
+                                    RedirectAttributes redirectAttributes) {
+
+        // 1. Buscar el artista
+        Optional<Artist> artistOpt = artistRepository.findById(id);
+
+        if (artistOpt.isPresent()) {
+            Artist artist = artistOpt.get();
+
+            // 2. Si tiene imagen, borrarla del disco
+            if (artist.getImage() != null && !artist.getImage().isEmpty()) {
+                fileStorageService.deleteFile(artist.getImage());
+
+                // 3. Actualizar la entidad y guardar
+                artist.setImage(null);
+                artistRepository.save(artist); // Actualizamos la BD
+            }
+        }
+
+        // 4. Redirigir de vuelta al formulario de edición
+        return "redirect:/artists/edit?id=" + id;
+    }
+
+    // Redirecciones de seguridad (get methods for post actions)
+    @GetMapping("/update")
+    public String redirectLostUpdate(@RequestParam(required = false) Long id) {
+        if (id != null) return "redirect:/artists/edit?id=" + id;
+        return "redirect:/artists";
+    }
+
+    @GetMapping("/insert")
+    public String redirectLostInsert() {
+        return "redirect:/artists/new";
+    }
+
+    @GetMapping({"/delete", "/delete-image"})
+    public String redirectLostDelete() {
         return "redirect:/artists";
     }
 }

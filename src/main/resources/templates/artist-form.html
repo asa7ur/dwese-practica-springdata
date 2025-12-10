@@ -7,6 +7,7 @@
 
 <div class="container mx-auto px-4 flex justify-center items-center min-h-[80vh]">
     <div class="w-full max-w-lg">
+
         <div class="bg-rock-800 rounded-lg shadow-2xl border border-gray-700 overflow-hidden">
 
             <div class="bg-black/40 px-6 py-4 border-b border-gray-700">
@@ -17,7 +18,7 @@
             </div>
 
             <div class="p-8">
-                <form th:action="${artist.id != null} ? @{/artists/update} : @{/artists/insert}"
+                <form th:action="${artist.id != null} ? @{/artists/update(id=${agent.id})} : @{/artists/insert}"
                       th:object="${artist}"
                       method="post"
                       enctype="multipart/form-data"
@@ -59,26 +60,37 @@
                         <label for="imageFile" class="block text-sm font-medium text-gray-400 mb-1"
                                th:text="#{msg.artist.form.label.image}">Imagen</label>
 
-                        <div class="relative">
+                        <div class="relative group">
                             <input type="file" id="imageFile" name="imageFile" accept="image/*"
-                                   class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition pl-10 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rock-red file:text-white hover:file:bg-rock-darkred">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                                <i class="fa-solid fa-image"></i>
-                            </span>
+                                   class="w-full bg-rock-700 text-gray-300 border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red transition file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-rock-red file:text-white hover:file:bg-rock-darkred cursor-pointer">
                         </div>
 
-                        <div th:if="${artist.image != null}" class="mt-2 flex items-center gap-2">
-                            <span class="text-xs text-green-400">
-                                <i class="fa-solid fa-check"></i> Imagen actual: <span th:text="${artist.image}">nombre.jpg</span>
-                            </span>
-                            <img th:src="@{'/uploads/' + ${artist.image}}" alt="Current Image"
-                                 class="h-10 w-10 object-cover rounded border border-gray-600">
+                        <div th:if="${artist.image != null}"
+                             class="mt-4 bg-black/20 p-4 rounded border border-gray-700">
+                            <div class="text-center mb-4">
+                                <p class="text-xs text-gray-400 mb-2 flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-eye"></i> Imagen actual
+                                </p>
+                                <img th:src="@{'/uploads/' + ${artist.image}}" alt="Current Image"
+                                     class="w-full h-48 object-cover rounded shadow-lg border border-gray-600 mx-auto">
+                                <span class="text-xs text-gray-500 mt-2 block break-all" th:text="${artist.image}">nombre_archivo.jpg</span>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-gray-700 flex justify-end items-center gap-3">
+                                <span class="text-sm text-gray-400 italic" th:text="#{msg.artist.form.question.image}">¿Eliminar imagen?</span>
+
+                                <button type="submit" form="deleteImageForm"
+                                        class="text-red-500 hover:text-red-400 text-sm font-bold hover:underline decoration-2 underline-offset-4 flex items-center gap-2 transition">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    <span th:text="#{msg.artist.form.delete.image}">Eliminar</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-gray-700">
                         <button type="submit"
-                                class="flex-1 bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-4 rounded transition duration-300">
+                                class="flex-1 bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-4 rounded shadow-lg transition duration-300">
                             <span th:text="#{msg.artist.form.btn.save}">Guardar Artista</span>
                         </button>
                         <a th:href="@{/artists}"
@@ -91,6 +103,10 @@
         </div>
     </div>
 </div>
+
+<form id="deleteImageForm" th:action="@{/artists/deleteImage}" method="post" class="hidden">
+    <input type="hidden" name="id" th:value="${artist.id}"/>
+</form>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
