@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -34,5 +35,6 @@ public class Stage {
 
     // Relación OneToMany: Un escenario alberga muchos conciertos
     @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Concert> concerts = new ArrayList<>();
 }

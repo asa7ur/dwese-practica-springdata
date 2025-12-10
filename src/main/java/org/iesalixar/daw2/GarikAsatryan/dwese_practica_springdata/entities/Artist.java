@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class Artist {
 
     // Relación OneToMany: Un artista puede tener muchos conciertos en varios escenarios
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<Concert> concerts = new ArrayList<>();
 
 }
