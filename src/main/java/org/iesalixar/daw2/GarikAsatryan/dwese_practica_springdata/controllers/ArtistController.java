@@ -142,9 +142,7 @@ public class ArtistController {
                                RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            // Si hay errores de validación (ej. nombre vacío), el objeto 'artist' que llega
-            // aquí ha perdido la imagen porque el formulario no la envía.
-            // La recuperamos de la BD para que la vista la pueda volver a pintar.
+            // Si hay errores de validación, recuperamos la imagen antigua solo para mostrarla en la vista
             if (artist.getId() != null) {
                 Artist existingArtist = artistRepository.findById(artist.getId()).orElse(null);
                 if (existingArtist != null) {
@@ -154,33 +152,38 @@ public class ArtistController {
             return "artist-form";
         }
 
-        // Lógica para mantener la imagen anterior si no suben una nueva
-        // Recuperamos el artista original de la BD para saber qué imagen tenía
+        // Recuperar el artista persistente de la BD
+        // Esto trae el objeto con la lista de conciertos intacta.
         Artist existingArtist = artistRepository.findById(artist.getId()).orElse(null);
 
-        if (!imageFile.isEmpty()) {
-            // Caso 1: Nueva imagen subida (reemplaza la anterior)
-            if (existingArtist != null && existingArtist.getImage() != null) {
-                fileStorageService.deleteFile(existingArtist.getImage());
-            }
-            String fileName = fileStorageService.saveFile(imageFile);
-            artist.setImage(fileName);
+        if (existingArtist != null) {
+            // 1. Actualizamos los campos básicos manualmente
+            existingArtist.setName(artist.getName());
+            existingArtist.setGenre(artist.getGenre());
+            existingArtist.setCountry(artist.getCountry());
 
-        } else if (deleteImage) {
-            // Caso 2: El usuario pulsó el botón "Eliminar foto"
-            if (existingArtist != null && existingArtist.getImage() != null) {
-                fileStorageService.deleteFile(existingArtist.getImage());
-            }
-            artist.setImage(null);
+            // 2. Lógica para la imagen sobre la entidad persistente 'existingArtist'
+            if (!imageFile.isEmpty()) {
+                // Caso 1: Nueva imagen subida (reemplaza la anterior)
+                if (existingArtist.getImage() != null) {
+                    fileStorageService.deleteFile(existingArtist.getImage());
+                }
+                String fileName = fileStorageService.saveFile(imageFile);
+                existingArtist.setImage(fileName);
 
-        } else {
-            // Caso 3: Mantener la imagen existente
-            if (existingArtist != null) {
-                artist.setImage(existingArtist.getImage());
+            } else if (deleteImage) {
+                // Caso 2: El usuario pulsó el botón "Eliminar foto"
+                if (existingArtist.getImage() != null) {
+                    fileStorageService.deleteFile(existingArtist.getImage());
+                }
+                existingArtist.setImage(null);
             }
+            // Caso 3: Si no se sube imagen y no se borra, 'existingArtist' mantiene la que tenía.
+
+            // 3. Guardamos la entidad persistente.
+            // Al usar este objeto, Hibernate ve que la lista de conciertos sigue ahí y no la borra.
+            artistRepository.save(existingArtist);
         }
-
-        artistRepository.save(artist);
 
         String message = messageSource.getMessage("msg.artist.flash.updated", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
