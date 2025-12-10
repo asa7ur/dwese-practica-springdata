@@ -118,6 +118,25 @@ public class ConcertController {
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
 
+        // Comprobamos si no hay errores previos en fechas y escenario
+        if (!result.hasFieldErrors("startTime") &&
+                !result.hasFieldErrors("endTime") &&
+                !result.hasFieldErrors("stage")) {
+
+            boolean isOverlapping = concertRepository.existsOverlappingConcert(
+                    concert.getStage().getId(),
+                    concert.getStartTime(),
+                    concert.getEndTime(),
+                    null // ID es null porque es una inserción nueva
+            );
+
+            if (isOverlapping) {
+                // Añadimos el error al campo "stage" o globalmente
+                result.rejectValue("stage", "msg.concert.stage.busy",
+                        "El escenario ya tiene un concierto programado en ese horario.");
+            }
+        }
+
         if (result.hasErrors()) {
             // Si hay error, recargamos las listas para que el formulario se vea bien
             model.addAttribute("allArtists", artistRepository.findAll());
@@ -139,6 +158,23 @@ public class ConcertController {
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
 
+        if (!result.hasFieldErrors("startTime") &&
+                !result.hasFieldErrors("endTime") &&
+                !result.hasFieldErrors("stage")) {
+
+            boolean isOverlapping = concertRepository.existsOverlappingConcert(
+                    concert.getStage().getId(),
+                    concert.getStartTime(),
+                    concert.getEndTime(),
+                    concert.getId() // Pasamos el ID actual para excluirlo de la búsqueda
+            );
+
+            if (isOverlapping) {
+                result.rejectValue("stage", "msg.concert.stage.busy",
+                        "El escenario ya tiene un concierto programado en ese horario.");
+            }
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("allArtists", artistRepository.findAll());
             model.addAttribute("allStages", stageRepository.findAll());
@@ -156,7 +192,7 @@ public class ConcertController {
     @PostMapping("/delete")
     public String deleteConcert(@RequestParam("id") Long id,
                                 RedirectAttributes redirectAttributes) {
-        
+
         concertRepository.deleteById(id);
 
         String message = messageSource.getMessage("msg.concert.flash.deleted", null, LocaleContextHolder.getLocale());

@@ -78,9 +78,17 @@
             </div>
 
             <div class="p-6 text-center">
-                <div class="mb-4 text-gray-600 group-hover:text-rock-red transition duration-300">
+                <div th:if="${artist.image != null}" class="mb-4 relative w-32 h-32 mx-auto">
+                    <img th:src="@{'/uploads/' + ${artist.image}}"
+                         class="w-full h-full object-cover rounded-full border-4 border-rock-red shadow-lg"
+                         alt="Artist Image">
+                </div>
+
+                <div th:unless="${artist.image != null}"
+                     class="mb-4 text-gray-600 group-hover:text-rock-red transition duration-300">
                     <i class="fa-solid fa-users fa-4x"></i>
                 </div>
+
                 <h5 class="text-xl font-bold text-white mb-1" th:text="${artist.name}">Nombre</h5>
                 <p class="text-rock-red font-medium text-sm uppercase tracking-wide" th:text="${artist.genre}">
                     Género</p>

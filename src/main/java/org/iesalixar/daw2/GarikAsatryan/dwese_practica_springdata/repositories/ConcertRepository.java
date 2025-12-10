@@ -22,4 +22,15 @@ public interface ConcertRepository extends JpaRepository<Concert, Long> {
 
     // Obtener los próximos 3 conciertos ordenados por fecha
     List<Concert> findTop3ByStartTimeAfterOrderByStartTimeAsc(LocalDateTime now);
+
+    // Comprueba que un concierto no solape con otro en el mismo escenario (excluye a si mismo)
+    @Query("SELECT COUNT(c) > 0 FROM Concert c WHERE " +
+            "c.stage.id = :stageId AND " +
+            "c.startTime < :endTime AND " +
+            "c.endTime > :startTime AND " +
+            "(:excludeId IS NULL OR c.id != :excludeId)")
+    boolean existsOverlappingConcert(@Param("stageId") Long stageId,
+                                     @Param("startTime") LocalDateTime startTime,
+                                     @Param("endTime") LocalDateTime endTime,
+                                     @Param("excludeId") Long excludeId);
 }

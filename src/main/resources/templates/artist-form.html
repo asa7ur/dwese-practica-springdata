@@ -18,7 +18,10 @@
 
             <div class="p-8">
                 <form th:action="${artist.id != null} ? @{/artists/update} : @{/artists/insert}"
-                      th:object="${artist}" method="post" class="space-y-6">
+                      th:object="${artist}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="space-y-6">
 
                     <input type="hidden" th:field="*{id}"/>
 
@@ -53,18 +56,24 @@
                     </div>
 
                     <div>
-                        <label for="image" class="block text-sm font-medium text-gray-400 mb-1"
-                               th:text="#{msg.artist.form.label.image}">Imagen (Nombre de archivo)</label>
+                        <label for="imageFile" class="block text-sm font-medium text-gray-400 mb-1"
+                               th:text="#{msg.artist.form.label.image}">Imagen</label>
+
                         <div class="relative">
-                            <input type="text" id="image" th:field="*{image}"
-                                   class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition pl-10"
-                                   th:placeholder="#{msg.artist.form.placeholder.image}">
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*"
+                                   class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition pl-10 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rock-red file:text-white hover:file:bg-rock-darkred">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                                    <i class="fa-solid fa-image"></i>
-                                </span>
+                                <i class="fa-solid fa-image"></i>
+                            </span>
                         </div>
-                        <p class="text-gray-500 text-xs mt-1 italic" th:text="#{msg.artist.form.help.image}">La
-                            funcionalidad de subida se habilitará próximamente.</p>
+
+                        <div th:if="${artist.image != null}" class="mt-2 flex items-center gap-2">
+                            <span class="text-xs text-green-400">
+                                <i class="fa-solid fa-check"></i> Imagen actual: <span th:text="${artist.image}">nombre.jpg</span>
+                            </span>
+                            <img th:src="@{'/uploads/' + ${artist.image}}" alt="Current Image"
+                                 class="h-10 w-10 object-cover rounded border border-gray-600">
+                        </div>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-gray-700">

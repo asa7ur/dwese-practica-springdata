@@ -5,6 +5,7 @@ import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.entities.Artis
 import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.entities.dto.ArtistDTO;
 import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.repositories.ArtistRepository;
 import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.repositories.ConcertRepository;
+import org.iesalixar.daw2.GarikAsatryan.dwese_practica_springdata.services.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
@@ -33,6 +35,9 @@ public class ArtistController {
 
     @Autowired
     private ConcertRepository concertRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Autowired
     private MessageSource messageSource;
@@ -106,10 +111,19 @@ public class ArtistController {
     @PostMapping("/insert")
     public String insertArtist(@Valid @ModelAttribute("artist") Artist artist,
                                BindingResult result,
+                               @RequestParam("imageFile") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return "artist-form";
+        }
+
+        // 3. Guardar imagen si no está vacía
+        if (!imageFile.isEmpty()) {
+            String fileName = fileStorageService.saveFile(imageFile);
+            if (fileName != null) {
+                artist.setImage(fileName);
+            }
         }
 
         artistRepository.save(artist);
@@ -123,10 +137,31 @@ public class ArtistController {
     @PostMapping("/update")
     public String updateArtist(@Valid @ModelAttribute("artist") Artist artist,
                                BindingResult result,
+                               @RequestParam("imageFile") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return "artist-form";
+        }
+
+        // Lógica para mantener la imagen anterior si no suben una nueva
+        // Recuperamos el artista original de la BD para saber qué imagen tenía
+        Artist existingArtist = artistRepository.findById(artist.getId()).orElse(null);
+
+        if (!imageFile.isEmpty()) {
+            // Si suben nueva imagen, borramos la vieja y guardamos la nueva
+            if (existingArtist != null && existingArtist.getImage() != null) {
+                fileStorageService.deleteFile(existingArtist.getImage());
+            }
+            String fileName = fileStorageService.saveFile(imageFile);
+            if (fileName != null) {
+                artist.setImage(fileName);
+            }
+        } else {
+            // Si no suben nada, mantenemos la imagen que ya tenía
+            if (existingArtist != null) {
+                artist.setImage(existingArtist.getImage());
+            }
         }
 
         artistRepository.save(artist);
