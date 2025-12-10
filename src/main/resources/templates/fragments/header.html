@@ -53,13 +53,15 @@
                     </a>
 
                     <div class="flex items-center gap-2 ml-4 border-l border-gray-700 pl-4">
-                        <a th:href="@{''(lang='es')}"
+                        <a th:href="${@urlBuilder.replaceParam('lang', 'es')}"
                            class="text-xs font-bold transition duration-300 hover:text-rock-red"
                            th:classappend="${#locale.language == 'es' ? 'text-rock-red underline decoration-2 underline-offset-4' : 'text-gray-500'}">
                             ES
                         </a>
+
                         <span class="text-gray-600">|</span>
-                        <a th:href="@{''(lang='en')}"
+
+                        <a th:href="${@urlBuilder.replaceParam('lang', 'en')}"
                            class="text-xs font-bold transition duration-300 hover:text-rock-red"
                            th:classappend="${#locale.language == 'en' ? 'text-rock-red underline decoration-2 underline-offset-4' : 'text-gray-500'}">
                             EN

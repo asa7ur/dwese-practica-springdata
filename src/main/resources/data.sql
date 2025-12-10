@@ -1,50 +1,71 @@
+-- 1. ARTISTAS
 INSERT IGNORE INTO artists (name, genre, country)
-VALUES ('Metallica', 'Thrash Metal', 'USA'),
-       ('Rammstein', 'Industrial Metal', 'Germany'),
-       ('Deftones', 'Alternative Metal', 'USA'),
-       ('Behemoth', 'Blackened Death Metal', 'Poland'),
-       ('Fit For An Autopsy', 'Deathcore', 'USA'),
-       ('Lorna Shore', 'Deathcore', 'USA'),
-       ('Gojira', 'Progressive Death Metal', 'France'),
-       ('Opeth', 'Progressive Metal', 'Sweden'),
-       ('Pantera', 'Groove Metal', 'USA'),
-       ('Mastodon', 'Progressive Metal', 'USA'),
-       ('Soen', 'Progressive Metal', 'Sweden'),
-       ('Igorrr', 'Avant-garde Metal', 'France'),
-       ('Loathe', 'Metalcore', 'UK'),
-       ('Linkin Park', 'Nu Metal', 'USA'),
-       ('Whitechapel', 'Deathcore', 'USA');
+VALUES ('Gojira', 'Progressive Death Metal', 'France'),       -- ID 1
+       ('Loathe', 'Metalcore', 'UK'),                         -- ID 2
+       ('Rammstein', 'Industrial Metal', 'Germany'),          -- ID 3
+       ('Faetooth', 'Doom Metal', 'USA'),                     -- ID 4
+       ('Deftones', 'Alternative Metal', 'USA'),              -- ID 5
+       ('Behemoth', 'Blackened Death Metal', 'Poland'),       -- ID 6
+       ('Fit For An Autopsy', 'Deathcore', 'USA'),            -- ID 7
+       ('Lorna Shore', 'Deathcore', 'USA'),                   -- ID 8
+       ('Opeth', 'Progressive Metal', 'Sweden'),              -- ID 9
+       ('Jinjer', 'Progressive Metal', 'Ukraine'),            -- ID 10
+       ('Metallica', 'Thrash Metal', 'USA'),                  -- ID 11
+       ('Mastodon', 'Progressive Metal', 'USA'),              -- ID 12
+       ('Evanescence', 'Nu Metal', 'USA'),                    -- ID 13
+       ('Tool', 'Progressive Metal', 'USA'),                  -- ID 14
+       ('Whitechapel', 'Deathcore', 'USA');                   -- ID 15
 
+-- 2. ESCENARIOS
 INSERT IGNORE INTO stages (name, capacity)
-VALUES ('Main Stage of Hell', 50000),
-       ('Purgatory Stage', 15000),
-       ('The Abyss', 5000);
+VALUES ('Main Stage of Hell', 50000),  -- ID 1
+       ('Purgatory Stage', 15000),     -- ID 2
+       ('The Abyss', 5000);            -- ID 3
 
+-- 3. CONCIERTOS
+
+-- DÍA 1 (10 Julio): Rammstein cierra. Gojira sub-cabeza.
 INSERT IGNORE INTO concerts (start_time, end_time, artist_id, stage_id)
-VALUES ('2025-07-10 18:00:00', '2025-07-10 19:30:00', 13, 2),
-       ('2025-07-10 19:00:00', '2025-07-10 20:30:00', 5, 3),
-       ('2025-07-10 20:00:00', '2025-07-10 21:30:00', 11, 2),
-       ('2025-07-10 21:00:00', '2025-07-10 23:00:00', 3, 1),
-       ('2025-07-10 23:30:00', '2025-07-11 01:30:00', 1, 1),
+VALUES
+       -- Escenario Pequeño (The Abyss)
+       ('2025-07-10 17:00:00', '2025-07-10 18:00:00', 2, 3),  -- Loathe
+       ('2025-07-10 18:30:00', '2025-07-10 19:30:00', 7, 3),  -- Fit For An Autopsy
 
-       ('2025-07-11 17:00:00', '2025-07-11 18:30:00', 15, 3),
-       ('2025-07-11 18:00:00', '2025-07-11 19:30:00', 12, 2),
-       ('2025-07-11 19:30:00', '2025-07-11 21:00:00', 6, 2),
-       ('2025-07-11 20:00:00', '2025-07-11 21:30:00', 4, 3),
-       ('2025-07-11 21:00:00', '2025-07-11 23:00:00', 7, 1),
-       ('2025-07-11 23:30:00', '2025-07-12 01:30:00', 2, 1),
+       -- Escenario Mediano (Purgatory)
+       ('2025-07-10 19:00:00', '2025-07-10 20:30:00', 13, 2), -- Evanescence
+       ('2025-07-10 21:00:00', '2025-07-10 22:30:00', 10, 2), -- Jinjer
 
-       ('2025-07-12 16:00:00', '2025-07-12 17:30:00', 10, 2),
-       ('2025-07-12 17:30:00', '2025-07-12 19:00:00', 8, 2),
-       ('2025-07-12 19:00:00', '2025-07-12 20:30:00', 9, 1),
-       ('2025-07-12 21:30:00', '2025-07-12 23:30:00', 14, 1),
+       -- Escenario Principal (Main)
+       ('2025-07-10 20:30:00', '2025-07-10 22:30:00', 1, 1),  -- Gojira (Telonero de lujo)
+       ('2025-07-10 23:00:00', '2025-07-11 01:00:00', 3, 1);  -- Rammstein (Cierre)
 
-       ('2025-07-10 16:00:00', '2025-07-10 17:00:00', 5, 3),
-       ('2025-07-11 01:30:00', '2025-07-11 03:00:00', 12, 3),
-       ('2025-07-12 14:00:00', '2025-07-12 15:30:00', 11, 2),
-       ('2025-07-12 15:00:00', '2025-07-12 16:00:00', 6, 3),
-       ('2025-07-10 22:00:00', '2025-07-10 23:30:00', 9, 2);
+-- DÍA 2 (11 Julio): Metallica cierra. Deftones sub-cabeza.
+INSERT IGNORE INTO concerts (start_time, end_time, artist_id, stage_id)
+VALUES
+       -- Escenario Pequeño (The Abyss)
+       ('2025-07-11 17:00:00', '2025-07-11 18:00:00', 4, 3),  -- Faetooth
+       ('2025-07-11 18:30:00', '2025-07-11 19:30:00', 15, 3), -- Whitechapel
 
+       -- Escenario Mediano (Purgatory)
+       ('2025-07-11 19:30:00', '2025-07-11 21:00:00', 12, 2), -- Mastodon
+       ('2025-07-11 21:30:00', '2025-07-11 23:00:00', 6, 2),  -- Behemoth
+
+       -- Escenario Principal (Main)
+       ('2025-07-11 20:30:00', '2025-07-11 22:30:00', 5, 1),  -- Deftones
+       ('2025-07-11 23:00:00', '2025-07-12 01:30:00', 11, 1); -- Metallica
+
+-- DÍA 3 (12 Julio): Tool cierra. Opeth sub-cabeza.
+INSERT IGNORE INTO concerts (start_time, end_time, artist_id, stage_id)
+VALUES
+       -- Escenario Pequeño/Mediano (Purgatory día más fuerte)
+       ('2025-07-12 18:00:00', '2025-07-12 19:30:00', 8, 2),  -- Lorna Shore (Purgatory)
+
+       -- Escenario Principal (Main)
+       ('2025-07-12 20:00:00', '2025-07-12 22:00:00', 9, 1),  -- Opeth
+       ('2025-07-12 22:30:00', '2025-07-13 00:30:00', 14, 1); -- Tool
+
+
+-- 4. ASISTENTES
 INSERT IGNORE INTO attendees (dni, name, phone, email)
 VALUES ('12345678A', 'Juan García', '600111222', 'juan.garcia@email.com'),
        ('87654321B', 'María López', '600333444', 'maria.lopez@email.com'),
@@ -62,6 +83,7 @@ VALUES ('12345678A', 'Juan García', '600111222', 'juan.garcia@email.com'),
        ('11002299P', 'Isabel Romero', '699000111', 'isabel.romero@email.com'),
        ('22113300Q', 'Miguel Navarro', '700111222', 'miguel.navarro@email.com');
 
+-- 5. TICKETS
 INSERT IGNORE INTO tickets (price, type, is_used, attendee_id)
 VALUES (150.00, 'GENERAL', 1, 1),
        (150.00, 'GENERAL', 1, 2),
@@ -71,7 +93,7 @@ VALUES (150.00, 'GENERAL', 1, 1),
        (250.00, 'VIP', 1, 6),
        (150.00, 'GENERAL', 0, 7),
        (150.00, 'GENERAL', 1, 8),
-       (300.00, 'VIP', 0, 9),
+       (250.00, 'VIP', 0, 9),
        (150.00, 'GENERAL', 1, 10),
        (150.00, 'GENERAL', 0, 11),
        (150.00, 'GENERAL', 1, 12),

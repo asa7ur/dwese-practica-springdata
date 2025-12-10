@@ -18,7 +18,7 @@
             </div>
 
             <div class="p-8">
-                <form th:action="${artist.id != null} ? @{/artists/update(id=${agent.id})} : @{/artists/insert}"
+                <form th:action="${artist.id != null} ? @{/artists/update} : @{/artists/insert}"
                       th:object="${artist}"
                       method="post"
                       enctype="multipart/form-data"

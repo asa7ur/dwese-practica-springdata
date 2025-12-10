@@ -142,6 +142,15 @@ public class ArtistController {
                                RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
+            // Si hay errores de validación (ej. nombre vacío), el objeto 'artist' que llega
+            // aquí ha perdido la imagen porque el formulario no la envía.
+            // La recuperamos de la BD para que la vista la pueda volver a pintar.
+            if (artist.getId() != null) {
+                Artist existingArtist = artistRepository.findById(artist.getId()).orElse(null);
+                if (existingArtist != null) {
+                    artist.setImage(existingArtist.getImage());
+                }
+            }
             return "artist-form";
         }
 
@@ -220,22 +229,5 @@ public class ArtistController {
 
         // 4. Redirigir de vuelta al formulario de edición
         return "redirect:/artists/edit?id=" + id;
-    }
-
-    // Redirecciones de seguridad (get methods for post actions)
-    @GetMapping("/update")
-    public String redirectLostUpdate(@RequestParam(required = false) Long id) {
-        if (id != null) return "redirect:/artists/edit?id=" + id;
-        return "redirect:/artists";
-    }
-
-    @GetMapping("/insert")
-    public String redirectLostInsert() {
-        return "redirect:/artists/new";
-    }
-
-    @GetMapping({"/delete", "/delete-image"})
-    public String redirectLostDelete() {
-        return "redirect:/artists";
     }
 }
