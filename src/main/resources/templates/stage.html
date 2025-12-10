@@ -9,11 +9,12 @@
 
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h2 class="text-3xl font-bold text-white text-shadow uppercase border-l-4 border-rock-red pl-4">
-            <i class="fa-solid fa-dungeon mr-2 text-rock-red"></i>Escenarios
+            <i class="fa-solid fa-dungeon mr-2 text-rock-red"></i>
+            <span th:text="#{msg.stage.list.title}">Escenarios</span>
         </h2>
         <a th:href="@{/stages/new}"
            class="bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-6 rounded shadow-lg transform hover:scale-105 transition duration-300">
-            <i class="fa-solid fa-plus mr-1"></i> Nuevo Escenario
+            <i class="fa-solid fa-plus mr-1"></i> <span th:text="#{msg.stage.list.btn.new}">Nuevo Escenario</span>
         </a>
     </div>
 
@@ -45,7 +46,8 @@
                     <div class="bg-black/40 rounded-lg p-3 border border-gray-600 flex items-center gap-3">
                         <i class="fa-solid fa-users text-rock-red text-xl"></i>
                         <div>
-                            <span class="block text-xs text-gray-400 uppercase">Aforo Máximo</span>
+                            <span class="block text-xs text-gray-400 uppercase"
+                                  th:text="#{msg.stage.list.capacity.max}">Aforo Máximo</span>
                             <span class="text-xl font-bold text-white" th:text="${stage.capacity}">50000</span>
                         </div>
                     </div>
@@ -54,15 +56,15 @@
                 <div class="flex gap-3 mt-4 border-t border-gray-700 pt-4">
                     <a th:href="@{/stages/edit(id=${stage.id})}"
                        class="flex-1 text-center py-2 rounded bg-gray-700 hover:bg-yellow-600/20 text-gray-300 hover:text-yellow-500 transition border border-transparent hover:border-yellow-500/50">
-                        <i class="fa-solid fa-pen mr-1"></i> Editar
+                        <i class="fa-solid fa-pen mr-1"></i> <span th:text="#{msg.btn.edit}">Editar</span>
                     </a>
 
                     <form th:action="@{/stages/delete}" method="post" class="flex-1">
                         <input type="hidden" name="id" th:value="${stage.id}"/>
                         <button type="submit"
                                 class="w-full py-2 rounded bg-gray-700 hover:bg-red-600/20 text-gray-300 hover:text-red-500 transition border border-transparent hover:border-red-500/50"
-                                onclick="return confirm('¿Seguro que quieres eliminar este escenario? Si tiene conciertos, no se podrá borrar.');">
-                            <i class="fa-solid fa-trash mr-1"></i> Borrar
+                                th:onclick="return confirm([[#{msg.stage.list.confirm.delete}]]);">
+                            <i class="fa-solid fa-trash mr-1"></i> <span th:text="#{msg.btn.delete}">Borrar</span>
                         </button>
                     </form>
                 </div>
@@ -74,9 +76,9 @@
         <div th:if="${#lists.isEmpty(stages)}"
              class="col-span-full text-center py-12 bg-rock-800/50 rounded-xl border border-dashed border-gray-600">
             <i class="fa-solid fa-wind text-4xl text-gray-600 mb-4"></i>
-            <p class="text-gray-400 text-lg">No hay escenarios creados todavía.</p>
-            <a th:href="@{/stages/new}" class="text-rock-red hover:underline mt-2 inline-block">¡Crea el primero
-                ahora!</a>
+            <p class="text-gray-400 text-lg" th:text="#{msg.stage.list.empty}">No hay escenarios creados todavía.</p>
+            <a th:href="@{/stages/new}" class="text-rock-red hover:underline mt-2 inline-block"
+               th:text="#{msg.stage.list.create_first}">¡Crea el primero ahora!</a>
         </div>
 
     </div>

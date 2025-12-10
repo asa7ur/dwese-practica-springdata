@@ -12,7 +12,7 @@
             <div class="bg-black/40 px-6 py-4 border-b border-gray-700">
                 <h4 class="text-lg font-bold text-white uppercase tracking-wide">
                     <i class="fa-solid fa-user-astronaut mr-2 text-rock-red"></i>
-                    <span th:text="${artist.id} ? 'Editar Artista' : 'Nuevo Artista'">Formulario</span>
+                    <span th:text="${artist.id} ? #{msg.artist.form.title.edit} : #{msg.artist.form.title.new}">Formulario</span>
                 </h4>
             </div>
 
@@ -23,56 +23,58 @@
                     <input type="hidden" th:field="*{id}"/>
 
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Nombre de la
-                            Banda</label>
+                        <label for="name" class="block text-sm font-medium text-gray-400 mb-1"
+                               th:text="#{msg.artist.form.label.name}">Nombre de la Banda</label>
                         <input type="text" id="name" th:field="*{name}"
                                class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
-                               placeholder="Ej. Rammstein">
+                               th:placeholder="#{msg.artist.form.placeholder.name}">
                         <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
                             Error</p>
                     </div>
 
                     <div>
-                        <label for="genre" class="block text-sm font-medium text-gray-400 mb-1">Género Musical</label>
+                        <label for="genre" class="block text-sm font-medium text-gray-400 mb-1"
+                               th:text="#{msg.artist.form.label.genre}">Género Musical</label>
                         <input type="text" id="genre" th:field="*{genre}"
                                class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
-                               placeholder="Ej. Industrial Metal">
+                               th:placeholder="#{msg.artist.form.placeholder.genre}">
                         <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}">
                             Error</p>
                     </div>
 
                     <div>
-                        <label for="country" class="block text-sm font-medium text-gray-400 mb-1">País de Origen</label>
+                        <label for="country" class="block text-sm font-medium text-gray-400 mb-1"
+                               th:text="#{msg.artist.form.label.country}">País de Origen</label>
                         <input type="text" id="country" th:field="*{country}"
                                class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition"
-                               placeholder="Ej. Alemania">
+                               th:placeholder="#{msg.artist.form.placeholder.country}">
                         <p class="text-red-500 text-xs mt-1" th:if="${#fields.hasErrors('country')}"
                            th:errors="*{country}">Error</p>
                     </div>
 
                     <div>
-                        <label for="image" class="block text-sm font-medium text-gray-400 mb-1">Imagen (Nombre de
-                            archivo)</label>
+                        <label for="image" class="block text-sm font-medium text-gray-400 mb-1"
+                               th:text="#{msg.artist.form.label.image}">Imagen (Nombre de archivo)</label>
                         <div class="relative">
                             <input type="text" id="image" th:field="*{image}"
                                    class="w-full bg-rock-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-rock-red focus:ring-1 focus:ring-rock-red transition pl-10"
-                                   placeholder="Pendiente de implementación...">
+                                   th:placeholder="#{msg.artist.form.placeholder.image}">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
                                     <i class="fa-solid fa-image"></i>
                                 </span>
                         </div>
-                        <p class="text-gray-500 text-xs mt-1 italic">La funcionalidad de subida se habilitará
-                            próximamente.</p>
+                        <p class="text-gray-500 text-xs mt-1 italic" th:text="#{msg.artist.form.help.image}">La
+                            funcionalidad de subida se habilitará próximamente.</p>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 mt-8 pt-4 border-t border-gray-700">
                         <button type="submit"
                                 class="flex-1 bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-4 rounded transition duration-300">
-                            Guardar Artista
+                            <span th:text="#{msg.artist.form.btn.save}">Guardar Artista</span>
                         </button>
                         <a th:href="@{/artists}"
                            class="flex-1 text-center bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white font-medium py-2 px-4 rounded transition duration-300">
-                            Cancelar
+                            <span th:text="#{msg.btn.cancel}">Cancelar</span>
                         </a>
                     </div>
                 </form>

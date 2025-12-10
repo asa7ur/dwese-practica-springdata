@@ -29,7 +29,7 @@ public class Ticket {
     private Type type;
 
     @Column(name = "is_used", nullable = false)
-    private boolean isUsed;
+    private boolean used;
 
     public enum Type {
         VIP, GENERAL;

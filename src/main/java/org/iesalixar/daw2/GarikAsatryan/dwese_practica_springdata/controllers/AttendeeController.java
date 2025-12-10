@@ -44,37 +44,38 @@ public class AttendeeController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
             Model model) {
-        logger.info("Listing attendee. Page: {}, Keyword: {}, Sort: {}, Dir: {}", page, keyword, sortBy, direction);
+
+        logger.info("Listando asistentes. Pág: {}, Keyword: {}, Sort: {}, Dir: {}", page, keyword, sortBy, direction);
 
         int pageSize = 6;
 
+        // Configuración de ordenación
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
         Pageable pageable = PageRequest.of(page - 1, pageSize, sort);
         Page<Attendee> attendeePage;
+
         if (keyword == null || keyword.isEmpty()) {
-            // Si no hay palabra clave, traemos todos los artistas paginados
             attendeePage = attendeeRepository.findAll(pageable);
         } else {
-            // Si hay palabra clave, usamos el metodo de búsqueda personalizado (por nombre, género, país...)
+            // Búsqueda por DNI o Nombre
             attendeePage = attendeeRepository.searchAttendees(keyword, pageable);
         }
 
-        // Empaquetado de datos (DTO)
-        // Usamos un DTO para enviar la lista de artistas y la info de paginación a la vista de forma limpia
+        // DTO para la vista
         AttendeeDTO attendeeDTO = new AttendeeDTO(
                 attendeePage.getContent(),
                 attendeePage.getTotalPages(),
                 page
         );
 
-        logger.info("Se han cargado {} asistentes.", attendeeDTO.getAttendees().size());
         model.addAttribute("listAttendees", attendeeDTO);
         model.addAttribute("keyword", keyword);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
         model.addAttribute("reverseSortDir", direction.equals("asc") ? "desc" : "asc");
+
         return "attendee";
     }
 
@@ -89,11 +90,9 @@ public class AttendeeController {
     public String showEditForm(@RequestParam("id") Long id,
                                RedirectAttributes redirectAttributes,
                                Model model) {
-        logger.info("Mostrando formulario de edición para el asistente con ID {}", id);
         Optional<Attendee> attendeeOpt = attendeeRepository.findById(id);
 
         if (attendeeOpt.isEmpty()) {
-            logger.warn("No se encontró el asistente con ID {}", id);
             String message = messageSource.getMessage("msg.attendee.flash.not-found", null, LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("errorMessage", message);
             return "redirect:/attendees";
@@ -108,14 +107,12 @@ public class AttendeeController {
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes) {
 
-        logger.info("Intentando insertar nuevo asistente...");
-
         if (result.hasErrors()) {
-            logger.warn("Errores de validación en el formulario de asistente.");
             return "attendee-form";
         }
 
         attendeeRepository.save(attendee);
+
         String message = messageSource.getMessage("msg.attendee.flash.created", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
 
@@ -127,15 +124,11 @@ public class AttendeeController {
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes) {
 
-        logger.info("Actualizando asistente con ID {}", attendee.getId());
-
         if (result.hasErrors()) {
-            logger.warn("Errores de validación al actualizar el asistente.");
             return "attendee-form";
         }
 
         attendeeRepository.save(attendee);
-        logger.info("Asistente con ID {} actualizado con éxito.", attendee.getId());
 
         String message = messageSource.getMessage("msg.attendee.flash.updated", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
@@ -146,20 +139,15 @@ public class AttendeeController {
     @PostMapping("/delete")
     public String deleteAttendee(@RequestParam("id") Long id,
                                  RedirectAttributes redirectAttributes) {
-        logger.info("Intentando eliminar asistente con ID {}", id);
 
-        // Comprobamos si tiene conciertos asignados
+        // Validación: No borrar si tiene entradas compradas
         if (ticketRepository.existsByAttendeeId(id)) {
-            logger.warn("Intento de eliminar asistente con ID {} fallido: Tiene entradas asignadas.", id);
-
-            String message = messageSource.getMessage("msg.attendee.flash.has-concerts", null, LocaleContextHolder.getLocale());
+            String message = messageSource.getMessage("msg.attendee.flash.has-tickets", null, LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("errorMessage", message);
             return "redirect:/attendees";
         }
 
-        // Si no tiene conciertos, procedemos a borrar
         attendeeRepository.deleteById(id);
-        logger.info("Asistente con ID {} eliminado correctamente", id);
 
         String message = messageSource.getMessage("msg.attendee.flash.deleted", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);

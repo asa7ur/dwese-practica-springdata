@@ -37,6 +37,7 @@ public class StageController {
     public String listStages(Model model) {
         logger.info("Listando todos los escenarios...");
 
+        // Sin paginación ni búsqueda, listado directo
         List<Stage> stages = stageRepository.findAll();
 
         model.addAttribute("stages", stages);
@@ -58,7 +59,6 @@ public class StageController {
         Optional<Stage> stageOpt = stageRepository.findById(id);
 
         if (stageOpt.isEmpty()) {
-            logger.warn("No se encontró el escenario con ID {}", id);
             String message = messageSource.getMessage("msg.stage.flash.not-found", null, LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("errorMessage", message);
             return "redirect:/stages";
@@ -73,14 +73,12 @@ public class StageController {
                               BindingResult result,
                               RedirectAttributes redirectAttributes) {
 
-        logger.info("Intentando insertar nuevo escenario...");
-
         if (result.hasErrors()) {
-            logger.warn("Errores de validación en el formulario de escenario.");
             return "stage-form";
         }
 
         stageRepository.save(stage);
+
         String message = messageSource.getMessage("msg.stage.flash.created", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
 
@@ -92,15 +90,11 @@ public class StageController {
                               BindingResult result,
                               RedirectAttributes redirectAttributes) {
 
-        logger.info("Actualizando escenario con ID {}", stage.getId());
-
         if (result.hasErrors()) {
-            logger.warn("Errores de validación al actualizar el escenario.");
             return "stage-form";
         }
 
         stageRepository.save(stage);
-        logger.info("Escenario con ID {} actualizado con éxito.", stage.getId());
 
         String message = messageSource.getMessage("msg.stage.flash.updated", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);
@@ -111,20 +105,15 @@ public class StageController {
     @PostMapping("/delete")
     public String deleteStage(@RequestParam("id") Long id,
                               RedirectAttributes redirectAttributes) {
-        logger.info("Intentando eliminar escenario con ID {}", id);
 
-        // Comprobamos si tiene conciertos asignados
+        // Comprobamos si tiene conciertos asignados antes de borrar
         if (concertRepository.existsByStageId(id)) {
-            logger.warn("Intento de eliminar escenario con ID {} fallido: Tiene conciertos asignados.", id);
-
             String message = messageSource.getMessage("msg.stage.flash.has-concerts", null, LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("errorMessage", message);
             return "redirect:/stages";
         }
 
-        // Si no tiene conciertos, procedemos a borrar
         stageRepository.deleteById(id);
-        logger.info("Escenario con ID {} eliminado correctamente", id);
 
         String message = messageSource.getMessage("msg.stage.flash.deleted", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("successMessage", message);

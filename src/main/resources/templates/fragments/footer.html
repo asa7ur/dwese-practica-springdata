@@ -3,8 +3,12 @@
 <body>
 <footer th:fragment="footer" class="bg-black py-8 mt-12 border-t border-gray-800">
     <div class="container mx-auto px-4 text-center">
-        <p class="text-gray-500 text-sm mb-2">&copy; 2025 Garik Asatryan - Gestión de Festival</p>
-        <p class="text-gray-600 text-xs">Desarrollado con Spring Boot & Tailwind CSS</p>
+        <p class="text-gray-500 text-sm mb-2">
+            &copy; <span th:text="#{msg.footer.copyright}">2025 Garik Asatryan</span>
+        </p>
+        <p class="text-gray-600 text-xs" th:text="#{msg.footer.credits}">
+            Desarrollado con...
+        </p>
     </div>
 </footer>
 </body>

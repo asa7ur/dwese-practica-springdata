@@ -9,11 +9,13 @@
 
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h2 class="text-3xl font-bold text-white text-shadow uppercase border-l-4 border-rock-red pl-4">
-            <i class="fa-solid fa-users-line mr-2 text-rock-red"></i>Asistentes
+            <i class="fa-solid fa-users-line mr-2 text-rock-red"></i>
+            <span th:text="#{msg.attendee.list.title}">Asistentes</span>
         </h2>
         <a th:href="@{/attendees/new}"
            class="bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-6 rounded shadow-lg transform hover:scale-105 transition duration-300">
-            <i class="fa-solid fa-plus mr-1"></i> Registrar Asistente
+            <i class="fa-solid fa-plus mr-1"></i> <span
+                th:text="#{msg.attendee.list.btn.new}">Registrar Asistente</span>
         </a>
     </div>
 
@@ -29,19 +31,42 @@
     </div>
 
     <div class="bg-rock-800 p-4 rounded-lg shadow-md mb-8 border border-gray-700">
-        <form th:action="@{/attendees}" method="get" class="flex flex-col md:flex-row gap-4">
-            <div class="flex-grow relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                        <i class="fa-solid fa-search"></i>
-                    </span>
+        <form th:action="@{/attendees}" method="get"
+              class="flex flex-col md:flex-row gap-4 justify-between items-center">
+
+            <div class="w-full md:w-1/2 relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <i class="fa-solid fa-search"></i>
+                </span>
                 <input type="text" name="keyword" th:value="${keyword}"
                        class="w-full bg-rock-700 text-white border border-gray-600 rounded pl-10 pr-4 py-2 focus:outline-none focus:border-rock-red transition placeholder-gray-500"
-                       placeholder="Buscar por nombre o DNI...">
+                       th:placeholder="#{msg.attendee.list.search.placeholder}">
             </div>
-            <button type="submit"
-                    class="bg-transparent border border-gray-500 hover:border-rock-red hover:text-rock-red text-gray-300 font-semibold py-2 px-6 rounded transition duration-300">
-                Buscar
-            </button>
+
+            <div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                <select name="sortBy"
+                        class="bg-rock-700 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-rock-red text-sm">
+                    <option value="id" th:selected="${sortBy == 'id'}" th:text="#{msg.sort.default}">Por Defecto
+                    </option>
+                    <option value="name" th:selected="${sortBy == 'name'}" th:text="#{msg.sort.name}">Nombre</option>
+                    <option value="dni" th:selected="${sortBy == 'dni'}" th:text="#{msg.sort.dni}">DNI</option>
+                    <option value="email" th:selected="${sortBy == 'email'}" th:text="#{msg.sort.email}">Email</option>
+                </select>
+
+                <select name="direction"
+                        class="bg-rock-700 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-rock-red text-sm">
+                    <option value="asc" th:selected="${direction == 'asc'}" th:text="#{msg.sort.asc}">Ascendente
+                    </option>
+                    <option value="desc" th:selected="${direction == 'desc'}" th:text="#{msg.sort.desc}">Descendente
+                    </option>
+                </select>
+
+                <button type="submit"
+                        class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition border border-gray-500"
+                        th:title="#{msg.btn.filter}">
+                    <i class="fa-solid fa-filter"></i>
+                </button>
+            </div>
         </form>
     </div>
 
@@ -75,15 +100,15 @@
             <div class="bg-black/20 p-4 flex justify-between items-center border-t border-gray-700">
                 <a th:href="@{/attendees/edit(id=${attendee.id})}"
                    class="text-yellow-500 hover:text-yellow-400 text-sm font-semibold transition flex items-center gap-1">
-                    <i class="fa-solid fa-pen"></i> Editar
+                    <i class="fa-solid fa-pen"></i> <span th:text="#{msg.btn.edit}">Editar</span>
                 </a>
 
                 <form th:action="@{/attendees/delete}" method="post" class="inline">
                     <input type="hidden" name="id" th:value="${attendee.id}"/>
                     <button type="submit"
                             class="text-red-500 hover:text-red-400 text-sm font-semibold transition flex items-center gap-1"
-                            onclick="return confirm('¿Eliminar a este asistente? Si tiene entradas compradas, no se podrá borrar.');">
-                        <i class="fa-solid fa-trash"></i> Borrar
+                            th:onclick="return confirm([[#{msg.attendee.list.confirm.delete}]]);">
+                        <i class="fa-solid fa-trash"></i> <span th:text="#{msg.btn.delete}">Borrar</span>
                     </button>
                 </form>
             </div>
@@ -91,13 +116,13 @@
     </div>
 
     <div th:if="${#lists.isEmpty(listAttendees.attendees)}" class="text-center py-12">
-        <p class="text-gray-500 text-xl">No se encontraron asistentes.</p>
+        <p class="text-gray-500 text-xl" th:text="#{msg.attendee.list.empty}">No se encontraron asistentes.</p>
     </div>
 
     <div class="mt-10 flex justify-center" th:if="${listAttendees.pages > 1}">
         <nav class="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
             <a th:each="i : ${#numbers.sequence(1, listAttendees.pages)}"
-               th:href="@{/attendees(page=${i}, keyword=${keyword})}"
+               th:href="@{/attendees(page=${i}, keyword=${keyword}, sortBy=${sortBy}, direction=${direction})}"
                th:text="${i}"
                class="px-4 py-2 border border-gray-700 text-sm font-medium transition"
                th:classappend="${i == listAttendees.currentPage} ? 'bg-rock-red text-white border-rock-red' : 'bg-rock-800 text-gray-400 hover:bg-gray-700'">

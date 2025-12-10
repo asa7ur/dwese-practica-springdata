@@ -1,10 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
 <body>
 
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mx-auto px-4 min-h-screen pb-12">
+
+    <div class="text-center mb-12 animate-fade-in-down">
+        <h1 class="text-5xl md:text-7xl font-bold text-white uppercase tracking-tighter mb-2"
+            style="text-shadow: 0 0 10px #dc3545, 0 0 20px #000;">
+            <span th:text="#{msg.app.name}">RockFest</span> <span class="text-rock-red">Manager</span>
+        </h1>
+        <p class="text-gray-400 text-xl tracking-widest uppercase" th:text="#{msg.index.hero.subtitle}">
+            Panel de Control & Estadísticas
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="bg-rock-800 border-l-4 border-green-500 rounded shadow-lg p-6 flex items-center justify-between transform hover:scale-105 transition duration-300">
+            <div>
+                <p class="text-gray-400 text-xs uppercase font-bold tracking-wider" th:text="#{msg.index.card.sales}">
+                    Ingresos Totales
+                </p>
+                <h3 class="text-2xl font-bold text-white" th:text="${totalSales} + ' €'">0 €</h3>
+            </div>
+            <div class="bg-green-500/10 p-3 rounded-full text-green-500">
+                <i class="fa-solid fa-money-bill-wave fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="bg-rock-800 border-l-4 border-rock-red rounded shadow-lg p-6 flex items-center justify-between transform hover:scale-105 transition duration-300">
+            <div>
+                <p class="text-gray-400 text-xs uppercase font-bold tracking-wider" th:text="#{msg.index.card.artists}">
+                    Bandas / Artistas
+                </p>
+                <h3 class="text-2xl font-bold text-white" th:text="${totalArtists}">0</h3>
+            </div>
+            <div class="bg-rock-red/10 p-3 rounded-full text-rock-red">
+                <i class="fa-solid fa-guitar fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="bg-rock-800 border-l-4 border-yellow-500 rounded shadow-lg p-6 flex items-center justify-between transform hover:scale-105 transition duration-300">
+            <div>
+                <p class="text-gray-400 text-xs uppercase font-bold tracking-wider"
+                   th:text="#{msg.index.card.concerts}">
+                    Conciertos Programados
+                </p>
+                <h3 class="text-2xl font-bold text-white" th:text="${totalConcerts}">0</h3>
+            </div>
+            <div class="bg-yellow-500/10 p-3 rounded-full text-yellow-500">
+                <i class="fa-solid fa-calendar-days fa-2x"></i>
+            </div>
+        </div>
+
+        <div class="bg-rock-800 border-l-4 border-blue-500 rounded shadow-lg p-6 flex items-center justify-between transform hover:scale-105 transition duration-300">
+            <div>
+                <p class="text-gray-400 text-xs uppercase font-bold tracking-wider"
+                   th:text="#{msg.index.card.attendees}">
+                    Asistentes Registrados
+                </p>
+                <h3 class="text-2xl font-bold text-white" th:text="${totalAttendees}">0</h3>
+            </div>
+            <div class="bg-blue-500/10 p-3 rounded-full text-blue-500">
+                <i class="fa-solid fa-users fa-2x"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <div class="lg:col-span-2 bg-rock-800 border border-gray-700 rounded-xl shadow-2xl p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 text-rock-red opacity-5">
+                <i class="fa-solid fa-ticket fa-10x"></i>
+            </div>
+
+            <h3 class="text-xl font-bold text-white mb-6 uppercase border-b border-gray-700 pb-2">
+                <i class="fa-solid fa-chart-pie mr-2 text-rock-red"></i> <span th:text="#{msg.index.stats.title}">Estadísticas de Ventas</span>
+            </h3>
+
+            <div class="space-y-8 relative z-10">
+
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-300" th:text="#{msg.index.stats.distribution}">Distribución por Tipo</span>
+                        <span class="text-sm font-medium text-gray-400">
+                            <span th:text="${totalTickets}">0</span> <span th:text="#{msg.index.stats.total_tickets}">Entradas</span>
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-4 flex overflow-hidden">
+                        <div class="bg-yellow-500 h-4 flex items-center justify-center text-[10px] text-black font-bold"
+                             th:style="'width: ' + ${vipPercent} + '%'"
+                             th:if="${vipPercent > 0}">
+                            <span th:text="${vipPercent} + '% VIP'"></span>
+                        </div>
+                        <div class="bg-gray-500 h-4 flex items-center justify-center text-[10px] text-white font-bold"
+                             th:style="'width: ' + ${generalPercent} + '%'"
+                             th:if="${generalPercent > 0}">
+                            <span th:text="${generalPercent} + '% GEN'"></span>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mt-2 text-xs">
+                        <div class="flex items-center gap-1">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            VIP (<span th:text="${vipTickets}"></span>)
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+                            General (<span th:text="${generalTickets}"></span>)
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-gray-300" th:text="#{msg.index.stats.capacity}">Control de Aforo</span>
+                        <span class="text-sm font-medium text-gray-400"
+                              th:text="${usedTickets} + ' / ' + ${totalTickets}"></span>
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-4 relative">
+                        <div class="bg-rock-red h-4 rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(220,53,69,0.7)]"
+                             th:style="'width: ' + ${usedPercent} + '%'"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2 text-right">
+                        <span th:text="${unusedTickets}"></span> <span th:text="#{msg.index.stats.pending}">pendientes de entrar</span>.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bg-rock-800 border border-gray-700 rounded-xl shadow-2xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 uppercase border-b border-gray-700 pb-2">
+                <i class="fa-solid fa-clock mr-2 text-rock-red"></i> <span th:text="#{msg.index.upcoming.title}">Próximos Shows</span>
+            </h3>
+
+            <div th:if="${#lists.isEmpty(nextConcerts)}" class="text-center text-gray-500 py-4">
+                <span th:text="#{msg.index.upcoming.empty}">No hay conciertos programados.</span>
+            </div>
+
+            <div class="space-y-4">
+                <div th:each="concert : ${nextConcerts}"
+                     class="bg-black/30 p-3 rounded border border-gray-700 flex gap-3 items-center hover:border-rock-red transition duration-300 group">
+
+                    <div class="bg-rock-700 rounded p-2 text-center min-w-[60px]">
+                        <span class="block text-xs text-rock-red font-bold uppercase"
+                              th:text="${#temporals.format(concert.startTime, 'MMM')}">JUL</span>
+                        <span class="block text-lg font-bold text-white leading-none"
+                              th:text="${#temporals.format(concert.startTime, 'dd')}">12</span>
+                    </div>
+
+                    <div>
+                        <h4 class="text-white font-bold text-lg leading-tight group-hover:text-rock-red transition"
+                            th:text="${concert.artist.name}">Artista</h4>
+                        <div class="text-xs text-gray-400 mt-1 flex gap-2">
+                            <span><i class="fa-regular fa-clock"></i> <span
+                                    th:text="${#temporals.format(concert.startTime, 'HH:mm')}"></span></span>
+                            <span>|</span>
+                            <span class="truncate max-w-[100px]" th:text="${concert.stage.name}">Escenario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <a th:href="@{/concerts}"
+                   class="text-sm text-rock-red hover:text-white transition uppercase font-bold tracking-wide">
+                    <span th:text="#{msg.index.upcoming.view_all}">Ver agenda completa</span> <i
+                        class="fa-solid fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-12 bg-gradient-to-r from-rock-red to-red-900 rounded-lg p-8 text-center shadow-[0_0_20px_rgba(220,53,69,0.4)]">
+        <h2 class="text-2xl font-bold text-white mb-2 uppercase italic" th:text="#{msg.index.banner.title}">¿Listo para
+            el caos?</h2>
+        <p class="text-red-100 mb-6" th:text="#{msg.index.banner.text}">Gestiona las ventas de última hora o añade
+            nuevas bandas al cartel.</p>
+        <div class="flex justify-center gap-4">
+            <a th:href="@{/tickets/new}"
+               class="bg-white text-rock-red font-bold py-2 px-6 rounded hover:bg-gray-200 transition">
+                <span th:text="#{msg.index.banner.btn.ticket}">Vender Entrada</span>
+            </a>
+            <a th:href="@{/artists/new}"
+               class="bg-black/30 text-white border border-white/30 font-bold py-2 px-6 rounded hover:bg-black/50 transition">
+                <span th:text="#{msg.index.banner.btn.artist}">Nuevo Artista</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

@@ -9,11 +9,12 @@
 
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h2 class="text-3xl font-bold text-white text-shadow uppercase border-l-4 border-rock-red pl-4">
-            <i class="fa-solid fa-ticket mr-2 text-rock-red"></i>Agenda de Conciertos
+            <i class="fa-solid fa-ticket mr-2 text-rock-red"></i>
+            <span th:text="#{msg.concert.list.title}">Agenda de Conciertos</span>
         </h2>
         <a th:href="@{/concerts/new}"
            class="bg-rock-red hover:bg-rock-darkred text-white font-bold py-2 px-6 rounded shadow-lg transform hover:scale-105 transition duration-300">
-            <i class="fa-solid fa-plus mr-1"></i> Programar Concierto
+            <i class="fa-solid fa-plus mr-1"></i> <span th:text="#{msg.concert.list.btn.new}">Programar Concierto</span>
         </a>
     </div>
 
@@ -31,29 +32,37 @@
     <div class="bg-rock-800 p-4 rounded-lg shadow-md mb-8 border border-gray-700">
         <form th:action="@{/concerts}" method="get"
               class="flex flex-col md:flex-row gap-4 justify-between items-center">
+
             <div class="w-full md:w-1/2 relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                         <i class="fa-solid fa-search"></i>
                     </span>
                 <input type="text" name="keyword" th:value="${keyword}"
                        class="w-full bg-rock-700 text-white border border-gray-600 rounded pl-10 pr-4 py-2 focus:outline-none focus:border-rock-red transition placeholder-gray-500"
-                       placeholder="Buscar por artista o escenario...">
+                       th:placeholder="#{msg.concert.list.search.placeholder}">
             </div>
 
-            <div class="flex gap-2 w-full md:w-auto">
+            <div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
                 <select name="sortBy"
                         class="bg-rock-700 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-rock-red text-sm">
-                    <option value="id" th:selected="${sortBy == 'id'}">Orden: Defecto</option>
-                    <option value="startTime" th:selected="${sortBy == 'startTime'}">Orden: Hora Inicio</option>
+                    <option value="id" th:selected="${sortBy == 'id'}" th:text="#{msg.sort.default}">Orden: Defecto
+                    </option>
+                    <option value="startTime" th:selected="${sortBy == 'startTime'}"
+                            th:text="#{msg.concert.sort.start_time}">Orden: Hora Inicio
+                    </option>
                 </select>
 
                 <select name="direction"
                         class="bg-rock-700 text-white border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-rock-red text-sm">
-                    <option value="asc" th:selected="${direction == 'asc'}">Ascendente</option>
-                    <option value="desc" th:selected="${direction == 'desc'}">Descendente</option>
+                    <option value="asc" th:selected="${direction == 'asc'}" th:text="#{msg.sort.asc}">Ascendente
+                    </option>
+                    <option value="desc" th:selected="${direction == 'desc'}" th:text="#{msg.sort.desc}">Descendente
+                    </option>
                 </select>
 
-                <button type="submit" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition">
+                <button type="submit"
+                        class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition border border-gray-500"
+                        th:title="#{msg.btn.filter}">
                     <i class="fa-solid fa-filter"></i>
                 </button>
             </div>
@@ -98,14 +107,14 @@
 
                 <div class="flex gap-3">
                     <a th:href="@{/concerts/edit(id=${concert.id})}"
-                       class="text-yellow-500 hover:text-yellow-400 text-sm transition" title="Editar">
+                       class="text-yellow-500 hover:text-yellow-400 text-sm transition" th:title="#{msg.btn.edit}">
                         <i class="fa-solid fa-pen"></i>
                     </a>
                     <form th:action="@{/concerts/delete}" method="post" class="inline">
                         <input type="hidden" name="id" th:value="${concert.id}"/>
                         <button type="submit" class="text-red-500 hover:text-red-400 text-sm transition"
-                                onclick="return confirm('¿Eliminar este concierto de la programación?');"
-                                title="Eliminar">
+                                th:onclick="return confirm([[#{msg.concert.list.confirm.delete}]]);"
+                                th:title="#{msg.btn.delete}">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </form>
@@ -114,7 +123,7 @@
         </div>
 
         <div th:if="${#lists.isEmpty(listConcerts.concerts)}" class="col-span-full text-center py-12">
-            <p class="text-gray-500 text-xl">No hay conciertos programados con estos criterios.</p>
+            <p class="text-gray-500 text-xl" th:text="#{msg.concert.list.empty}">No hay conciertos programados.</p>
         </div>
     </div>
 

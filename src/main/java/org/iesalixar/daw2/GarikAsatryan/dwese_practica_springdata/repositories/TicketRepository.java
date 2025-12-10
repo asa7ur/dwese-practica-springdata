@@ -14,4 +14,12 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Page<Ticket> searchTickets(@Param("keyword") String keyword, Pageable pageable);
 
     boolean existsByAttendeeId(Long attendeeId);
+
+    // Cuenta la cantidad de tickets por tipo y estado
+    long countByType(Ticket.Type type);
+
+    long countByUsed(boolean isUsed);
+
+    @Query("SELECT SUM(t.price) FROM Ticket t")
+    Double sumTotalSales();
 }
